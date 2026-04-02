@@ -12,10 +12,10 @@ const dataController = {
             await firebase.sendDatabase(parsedJsonObject.data);
             const lastStatus = await dataService.getLastStatus();
             if ((parsedJsonObject.data["status"] === "power_up" && parsedJsonObject.data["status"] !== lastStatus)) {
-                console.log("Send \"power up\" status message over firebase messaging.");
+                //console.log("Send \"power up\" status message over firebase messaging.");
                 await firebase.sendMessage(parsedJsonObject.data);
             } else if (parsedJsonObject.data["status"].startsWith("power_down") && lastStatus === "power_up") {
-                console.log("Send \"power down\" status message over firebase messaging.");
+                //console.log("Send \"power down\" status message over firebase messaging.");
                 await firebase.sendMessage(parsedJsonObject.data);
             }
             await dataService.putData({

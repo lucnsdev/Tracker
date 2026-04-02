@@ -1,12 +1,19 @@
+import "dotenv/config";
 import fs from "fs";
 import admin from "firebase-admin";
 //const { GoogleAuth } = 'google-auth-library';
+const raw = process.env.SECRETS_PATH;
+const rtdbUrl = process.env.DATABASE_URL;
+const credentialFileName = process.env.CREDENTIAL_FILE_NAME;
+const adminTokenFileName = process.env.ADMIN_TOKEN_FILENAME;
+const rtdbDir = process.env.REALTIME_DATABASE_DIR;
 
 function initializeFirebase() {
+    console.log(`${raw}/${credentialFileName}`);
     if (admin.apps.length === 0) {
         admin.initializeApp({
-            credential: admin.credential.cert('./raw/esp32-firebase-5a830-firebase-adminsdk-fbsvc-b40e836e4a.json'),
-            databaseURL: "https://esp32-firebase-5a830-default-rtdb.firebaseio.com/"
+            credential: admin.credential.cert(`${raw}/${credentialFileName}`),
+            databaseURL: rtdbUrl
         });
     }
 }
@@ -16,9 +23,9 @@ const firebase = {
     async sendDatabase(data) {
         initializeFirebase();
         const db = admin.database();
-        const postsRef = db.ref("tracker/data");
+        const postsRef = db.ref(rtdbDir);
         await postsRef.set(data);
-        console.log("Firebase realtime database sent.");
+        //console.log("Firebase realtime database sent.");
     },
 
     async sendMessage(data) {
@@ -26,7 +33,7 @@ const firebase = {
         Object.entries(data).forEach(([key, value]) => {
             jsonData[`${key}`] = `${value}`;
         });
-        const destineToken = await fs.readFileSync('./raw/admim-messaging-token.txt', 'utf8');
+        const destineToken = await fs.readFileSync(`${raw}/${adminTokenFileName}`, 'utf8');
         const message = {
             "token": destineToken,
             "android": {
@@ -46,8 +53,8 @@ const firebase = {
     },
 
     async isExpired() {
-        if (!fs.existsSync('./raw/data.json')) return true;
-        const data = await fs.readFileSync('./raw/token.json');
+        if (!fs.existsSync(`${raw}data.json`)) return true;
+        const data = await fs.readFileSync(`${raw}/token.json`);
         const jsonObject = JSON.parse(data);
         return jsonObject["expires_in"] <= Date.now() / 1000;
     }
