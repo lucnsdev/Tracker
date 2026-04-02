@@ -4,7 +4,7 @@ const raw = process.env.SECRETS_PATH;
 const dataService = {
 
   async getLastStatus() {
-    if (!fs.existsSync(dir)) return undefined;
+    if (!fs.existsSync(`${raw}`)) return undefined;
     try {
       const data = await fs.readFileSync(`${raw}/data.json`);
       const jsonObject = JSON.parse(data);
@@ -15,8 +15,8 @@ const dataService = {
   },
   async putData({ data }) {
     const jsonData = JSON.stringify(data, null, 4);
-    if (!fs.existsSync(dir)) {
-      await fs.mkdir(dir, { recursive: true }, (err) => {
+    if (!fs.existsSync(`${raw}`)) {
+      await fs.mkdir(`${raw}`, { recursive: true }, (err) => {
         if (err) {
           console.error('An error occurred while create raw folder.', err);
         }
@@ -29,7 +29,7 @@ const dataService = {
     });
   },
   async getData() {
-    if (!fs.existsSync(dir)) return { "status": "data_not_exists" };
+    if (!fs.existsSync(`${raw}`)) return { "status": "data_not_exists" };
     try {
       const data = await fs.readFileSync(`${raw}/data.json`);
       const jsonObject = JSON.parse(data);

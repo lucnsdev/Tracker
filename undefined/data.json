@@ -1,0 +1,10 @@
+{
+    "active_time": 17,
+    "hdop": 1.49,
+    "satellites": 6,
+    "latitude": -3.123456,
+    "longitude": -39.123456,
+    "captured_at": 1775081809,
+    "powered_at": 1775081803,
+    "status": "power_up"
+}

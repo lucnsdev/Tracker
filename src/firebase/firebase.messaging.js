@@ -9,7 +9,6 @@ const adminTokenFileName = process.env.ADMIN_TOKEN_FILENAME;
 const rtdbDir = process.env.REALTIME_DATABASE_DIR;
 
 function initializeFirebase() {
-    console.log(`${raw}/${credentialFileName}`);
     if (admin.apps.length === 0) {
         admin.initializeApp({
             credential: admin.credential.cert(`${raw}/${credentialFileName}`),
