@@ -1,0 +1,19 @@
+{
+  "name": "secret-api",
+  "version": "1.0.0",
+  "description": "This is only a test.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1",
+    "firebase-admin": "^13.7.0",
+    "fs": "^0.0.1-security",
+    "zod": "^4.3.6"
+  }
+}
