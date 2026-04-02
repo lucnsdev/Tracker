@@ -1,14 +1,13 @@
 import fs from "fs";
-
-const dir = "./raw";
+const raw = process.env.SECRETS_PATH;
 
 const dataService = {
 
   async getLastStatus() {
     if (!fs.existsSync(dir)) return undefined;
     try {
-      const data = await fs.readFileSync('./raw/data.json');
-      const jsonObject = JSON.parse(data);      
+      const data = await fs.readFileSync(`${raw}/data.json`);
+      const jsonObject = JSON.parse(data);
       return jsonObject["status"];
     } catch (err) {
       console.error('File read failure. Error:', err);
@@ -23,7 +22,7 @@ const dataService = {
         }
       });
     }
-    await fs.writeFile('./raw/data.json', jsonData, 'utf8', (err) => {
+    await fs.writeFile(`${raw}/data.json`, jsonData, 'utf8', (err) => {
       if (err) {
         console.error('An error occurred while writing file.', err);
       }
@@ -32,7 +31,7 @@ const dataService = {
   async getData() {
     if (!fs.existsSync(dir)) return { "status": "data_not_exists" };
     try {
-      const data = await fs.readFileSync('./raw/data.json');
+      const data = await fs.readFileSync(`${raw}/data.json`);
       const jsonObject = JSON.parse(data);
       return jsonObject;
     } catch (err) {
