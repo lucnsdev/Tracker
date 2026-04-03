@@ -4,7 +4,7 @@ const raw = process.env.SECRETS_PATH;
 const dataService = {
 
   async getLastStatus() {
-    if (!fs.existsSync(`${raw}`)) return undefined;
+    if (!fs.existsSync(`${raw}` || !fs.existsSync(`${raw}/data.json`))) return undefined;
     try {
       const data = await fs.readFileSync(`${raw}/data.json`);
       const jsonObject = JSON.parse(data);
