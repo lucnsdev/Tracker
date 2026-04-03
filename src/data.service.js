@@ -29,7 +29,7 @@ const dataService = {
     });
   },
   async getData() {
-    if (!fs.existsSync(`${raw}`)) return { "status": "data_not_exists" };
+    if (!fs.existsSync(`${raw}`) || !fs.existsSync(`${raw}/data.json`)) return { "status": "data_not_exists" };
     try {
       const data = await fs.readFileSync(`${raw}/data.json`);
       const jsonObject = JSON.parse(data);
