@@ -2,7 +2,7 @@ import "dotenv/config";
 import fs from "fs";
 import admin from "firebase-admin";
 //const { GoogleAuth } = 'google-auth-library';
-const raw = process.env.SECRETS_PATH;
+const secrets = process.env.SECRETS_PATH;
 const rtdbUrl = process.env.DATABASE_URL;
 const credentialFileName = process.env.CREDENTIAL_FILE_NAME;
 const adminTokenFileName = process.env.ADMIN_TOKEN_FILENAME;
@@ -11,7 +11,7 @@ const rtdbDir = process.env.REALTIME_DATABASE_DIR;
 function initializeFirebase() {
     if (admin.apps.length === 0) {
         admin.initializeApp({
-            credential: admin.credential.cert(`${raw}/${credentialFileName}`),
+            credential: admin.credential.cert(`${secrets}/${credentialFileName}`),
             databaseURL: rtdbUrl
         });
     }
@@ -32,7 +32,7 @@ const firebase = {
         Object.entries(data).forEach(([key, value]) => {
             jsonData[`${key}`] = `${value}`;
         });
-        const destineToken = await fs.readFileSync(`${raw}/${adminTokenFileName}`, 'utf8');
+        const destineToken = await fs.readFileSync(`${secrets}/${adminTokenFileName}`, 'utf8');
         const message = {
             "token": destineToken,
             "android": {
@@ -43,17 +43,14 @@ const firebase = {
         };
         initializeFirebase();
         admin.messaging().send(message)
-            .then((response) => {
-                console.log('Successfully sent message:', response);
-            })
             .catch((error) => {
                 console.log('Error sending message:', error);
             });
     },
 
     async isExpired() {
-        if (!fs.existsSync(`${raw}data.json`)) return true;
-        const data = await fs.readFileSync(`${raw}/token.json`);
+        if (!fs.existsSync(`${secrets}data.json`)) return true;
+        const data = await fs.readFileSync(`${secrets}/token.json`);
         const jsonObject = JSON.parse(data);
         return jsonObject["expires_in"] <= Date.now() / 1000;
     }

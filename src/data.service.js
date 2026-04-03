@@ -1,13 +1,13 @@
-import "dotenv/config";
 import fs from "fs";
-const raw = process.env.SECRETS_PATH;
+
+const dataFolder = './data';
 
 const dataService = {
 
   async getLastStatus() {
-    if (!fs.existsSync(`${raw}` || !fs.existsSync(`${raw}/data.json`))) return undefined;
+    if (!fs.existsSync(dataFolder || !fs.existsSync(`${dataFolder}/data.json`))) return undefined;
     try {
-      const data = await fs.readFileSync(`${raw}/data.json`);
+      const data = await fs.readFileSync(`${dataFolder}/data.json`);
       const jsonObject = JSON.parse(data);
       return jsonObject["status"];
     } catch (err) {
@@ -16,23 +16,23 @@ const dataService = {
   },
   async putData({ data }) {
     const jsonData = JSON.stringify(data, null, 4);
-    if (!fs.existsSync(`${raw}`)) {
-      await fs.mkdir(`${raw}`, { recursive: true }, (err) => {
+    if (!fs.existsSync(dataFolder)) {
+      await fs.mkdir(dataFolder, { recursive: true }, (err) => {
         if (err) {
           console.error('An error occurred while create raw folder.', err);
         }
       });
     }
-    await fs.writeFile(`${raw}/data.json`, jsonData, 'utf8', (err) => {
+    await fs.writeFile('./data/data.json', jsonData, 'utf8', (err) => {
       if (err) {
         console.error('An error occurred while writing file.', err);
       }
     });
   },
   async getData() {
-    if (!fs.existsSync(`${raw}`) || !fs.existsSync(`${raw}/data.json`)) return { "status": "empty_data" };
+    if (!fs.existsSync(dataFolder) || !fs.existsSync(`${dataFolder}/data.json`)) return { "status": "empty_data" };
     try {
-      const data = await fs.readFileSync(`${raw}/data.json`);
+      const data = await fs.readFileSync(`${dataFolder}/data.json`);
       const jsonObject = JSON.parse(data);
       return jsonObject;
     } catch (err) {
