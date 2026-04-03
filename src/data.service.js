@@ -1,3 +1,4 @@
+import "dotenv/config";
 import fs from "fs";
 const raw = process.env.SECRETS_PATH;
 
